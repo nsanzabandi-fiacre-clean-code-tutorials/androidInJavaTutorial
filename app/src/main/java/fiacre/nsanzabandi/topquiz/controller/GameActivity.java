@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
 
     public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
 
+    private boolean enableTouchEvents;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,7 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
 
         score = 0;
         numberOfQuestions = 4;
+        enableTouchEvents = true;
         // Retrieve the widgets
         questionTextView = findViewById(R.id.activity_game_question_text);
         answerButton1 = findViewById(R.id.activity_game_answer1_btn);
@@ -74,6 +78,7 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
             Toast.makeText(this, "Incorrect", Toast.LENGTH_SHORT).show();
         }
 
+        enableTouchEvents = false;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -85,7 +90,12 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
                 }
             }
         }, 2000);
+        enableTouchEvents = true;
+    }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return enableTouchEvents && super.dispatchTouchEvent(ev);
     }
 
     private void endGame() {
