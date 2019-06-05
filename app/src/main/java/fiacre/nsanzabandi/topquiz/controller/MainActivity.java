@@ -49,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
         playButton.setEnabled(false);
 
+        /**
+         * TODO: Regarder dans GameActivity comment on utilise savedInstanceState pour récupérer des valeurs
+         * Ici on veut challenger le user.
+         */
         nameInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

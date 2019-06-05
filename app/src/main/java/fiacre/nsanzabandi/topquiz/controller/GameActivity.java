@@ -33,6 +33,9 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
 
     public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
 
+    public static final String BUNDLE_STATE_SCORE = "currentScore";
+    public static final String BUNDLE_STATE_QUESTION = "currentQuestion";
+
     private boolean enableTouchEvents;
 
     @Override
@@ -42,8 +45,14 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
 
         questionBank = this.generateQuestions();
 
-        score = 0;
-        numberOfQuestions = 4;
+        if (savedInstanceState != null) {
+            score = savedInstanceState.getInt(BUNDLE_STATE_SCORE);
+            numberOfQuestions = savedInstanceState.getInt(BUNDLE_STATE_QUESTION);
+        } else {
+            score = 0;
+            numberOfQuestions = 4;
+        }
+
         enableTouchEvents = true;
         // Retrieve the widgets
         questionTextView = findViewById(R.id.activity_game_question_text);
@@ -65,6 +74,13 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
 
         currentQuestion = questionBank.getQuestion();
         this.displayQuestion(currentQuestion);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(BUNDLE_EXTRA_SCORE, score);
+        outState.putInt(BUNDLE_STATE_QUESTION, numberOfQuestions);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
