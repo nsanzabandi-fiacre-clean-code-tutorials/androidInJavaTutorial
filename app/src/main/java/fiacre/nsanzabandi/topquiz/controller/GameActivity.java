@@ -1,6 +1,8 @@
 package fiacre.nsanzabandi.topquiz.controller;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
     private Question currentQuestion;
     private int score;
     private int numberOfQuestions;
+
+    public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +74,18 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
             Toast.makeText(this, "Incorrect", Toast.LENGTH_SHORT).show();
         }
 
-        if (--numberOfQuestions == 0) {
-            endGame();
-        } else {
-            currentQuestion = questionBank.getQuestion();
-            displayQuestion(currentQuestion);        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (--numberOfQuestions == 0) {
+                    endGame();
+                } else {
+                    currentQuestion = questionBank.getQuestion();
+                    displayQuestion(currentQuestion);
+                }
+            }
+        }, 2000);
+
     }
 
     private void endGame() {
@@ -84,6 +95,9 @@ public class GameActivity extends AppCompatActivity  implements View.OnClickList
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent();
+                intent.putExtra(BUNDLE_EXTRA_SCORE, score);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
